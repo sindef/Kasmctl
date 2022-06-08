@@ -7,7 +7,7 @@ import (
 )
 
 //kasmctl exec user logout <username>
-//kasmctl exec command <command> <sessionid>
+//kasmctl exec command <sessionid> <command>
 
 //This is the entry point for EXEC functions
 func Run(target []string) {
@@ -30,10 +30,10 @@ func Run(target []string) {
 		}
 	case "command":
 		if len(target) > 2 {
-			ExecCommand(url, key, secret, notls, target[1], target[2])
+			ExecCommand(url, key, secret, notls, target[2], target[1])
 		} else {
 			fmt.Println("Please specify a sessionid and command")
-			fmt.Println("kasmctl exec command <command> <sessionid>")
+			fmt.Println("kasmctl exec command <sessionid> <command>")
 		}
 	default:
 		fmt.Println("Invalid target")
