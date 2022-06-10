@@ -40,3 +40,7 @@ func Run(target []string) {
 		admin.Help()
 	}
 }
+func Test(url string, key string, secret string, notls bool, target string) {
+	ExecCommand(url, key, secret, notls, "1", "echo test")
+	LogoutUser(url, key, secret, notls, "testuser")
+}

@@ -69,14 +69,14 @@ type Attr struct {
 
 //Returns a user ID from a username - this is exported to be used by the other packages
 func GetUserID(url string, key string, secret string, notls bool, username string) string {
-	body := getUser(url, key, secret, notls, username)
+	body := GetUser(url, key, secret, notls, username)
 	var user User
 	json.Unmarshal(body, &user)
 	return user.User.User_ID
 }
 
 //Returns a JSON response from the API - gets a single user and returns the response as a []byte which can be unmarshalled into a struct
-func getUser(url string, key string, secret string, notls bool, username string) []byte {
+func GetUser(url string, key string, secret string, notls bool, username string) []byte {
 	getuserurl := url + "/api/public/get_user"
 
 	js := []byte(`{
@@ -87,6 +87,9 @@ func getUser(url string, key string, secret string, notls bool, username string)
 		}
 	}`)
 	req, err := http.NewRequest("POST", getuserurl, bytes.NewBuffer(js))
+	if err != nil {
+		fmt.Println(err)
+	}
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	if notls {
@@ -101,8 +104,8 @@ func getUser(url string, key string, secret string, notls bool, username string)
 	return body
 }
 
-func singleUser(url string, key string, secret string, notls bool, username string) {
-	body := getUser(url, key, secret, notls, username)
+func SingleUser(url string, key string, secret string, notls bool, username string) {
+	body := GetUser(url, key, secret, notls, username)
 
 	//Unmarshall the JSON into a struct - we can then print the fields we want
 	var user User
@@ -126,14 +129,14 @@ func singleUser(url string, key string, secret string, notls bool, username stri
 }
 
 //Returns all of the users in the system
-func allUsers(url string, key string, secret string, notls bool, verbose bool) {
+func AllUsers(url string, key string, secret string, notls bool, verbose bool) {
 	getuserurl := url + "/api/public/get_users"
 
-	js := []byte(`{
-		"api_key": "` + key + `",
-		"api_key_secret": "` + secret + `"
-	}`)
+	js := []byte(`{"api_key":"` + key + `","api_key_secret":"` + secret + `"}`)
 	req, err := http.NewRequest("POST", getuserurl, bytes.NewBuffer(js))
+	if err != nil {
+		fmt.Println(err)
+	}
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	if notls {
@@ -175,8 +178,8 @@ func allUsers(url string, key string, secret string, notls bool, verbose bool) {
 
 }
 
-func singleUserAttr(url string, key string, secret string, notls bool, username string) {
-	user := getUser(url, key, secret, notls, username)
+func SingleUserAttr(url string, key string, secret string, notls bool, username string) {
+	user := GetUser(url, key, secret, notls, username)
 	//We have returned a JSON object, but we only need the user_ID field for the next request so we'll unmarshall it into a struct of User then pull out the user_ID field
 	var userd User
 	json.Unmarshal(user, &userd)
@@ -191,6 +194,9 @@ func singleUserAttr(url string, key string, secret string, notls bool, username 
 	}`)
 	attrurl := url + "/api/public/get_attributes"
 	req, err := http.NewRequest("POST", attrurl, bytes.NewBuffer(js))
+	if err != nil {
+		panic(err)
+	}
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	if notls {

@@ -2,6 +2,7 @@ package test
 
 import (
 	"bytes"
+	"crypto/tls"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -35,6 +36,11 @@ func TestConfig(config map[string]string) (url string, key string, secret string
 		} else {
 			panic(err)
 		}
+	}
+	//If we returned a TLS error, we set notls to true, but we don't want to panic so we make the request again
+	if notls {
+		client = &http.Client{Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}}
+		resp, err = client.Do(req)
 	}
 	defer resp.Body.Close()
 	body, _ := ioutil.ReadAll(resp.Body)

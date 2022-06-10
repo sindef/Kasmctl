@@ -16,7 +16,7 @@ func Run(target []string) {
 			//Usage: kasmctl get user <username> or kasmctl get user <username> --attributes
 			if len(target) > 2 {
 				if target[2] == "attributes" {
-					singleUserAttr(url, key, secret, notls, target[1])
+					SingleUserAttr(url, key, secret, notls, target[1])
 				} else {
 					fmt.Println("Invalid argument")
 					fmt.Println("Usage: kasmctl get user <username> [attributes]")
@@ -25,17 +25,17 @@ func Run(target []string) {
 				fmt.Println("Please specify a user")
 				fmt.Println("kasmctl get user <user>")
 			} else {
-				singleUser(url, key, secret, notls, target[1])
+				SingleUser(url, key, secret, notls, target[1])
 			}
 
 		case "users":
 			//Usage: kasmctl get users or kasmctl get users --verbose
 			if len(target) > 1 {
 				if target[1] == "--verbose" {
-					allUsers(url, key, secret, notls, true)
+					AllUsers(url, key, secret, notls, true)
 				}
 			} else {
-				allUsers(url, key, secret, notls, false)
+				AllUsers(url, key, secret, notls, false)
 			}
 		case "groups":
 			fmt.Println("Not implemented yet")
@@ -46,14 +46,22 @@ func Run(target []string) {
 					fmt.Println("Invalid argument")
 					fmt.Println("Usage: kasmctl get sessions <username>")
 				} else {
-					getKasmUser(url, key, secret, notls, target[1])
+					GetKasmUser(url, key, secret, notls, target[1])
 				}
 			} else {
 				GetAllKasms(url, key, secret, notls)
 			}
 
 		case "images":
-			fmt.Println("Not implemented yet")
+			//Usage: kasmctl get images
+			if len(target) == 2 && target[1] == "--verbose" {
+				GetImages(url, key, secret, notls, true)
+			} else if len(target) == 1 {
+				GetImages(url, key, secret, notls, false)
+			} else {
+				fmt.Println("Invalid argument")
+				fmt.Println("Usage: kasmctl get images [--verbose]")
+			}
 		default:
 			fmt.Println("Invalid target")
 			admin.Help()
@@ -62,4 +70,15 @@ func Run(target []string) {
 		fmt.Println("No target provided - Please provide a target")
 		admin.Help()
 	}
+}
+
+func Test(url string, key string, secret string, notls bool, target string) {
+	GetAllKasms(url, key, secret, notls)
+	GetKasms(url, key, secret, notls)
+	GetKasmUser(url, key, secret, notls, target)
+	GetKasmID(url, key, secret, notls, target)
+	GetUser(url, key, secret, notls, target)
+	GetUserID(url, key, secret, notls, target)
+	AllUsers(url, key, secret, notls, false)
+	GetImages(url, key, secret, notls, false)
 }

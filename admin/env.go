@@ -50,7 +50,7 @@ Usage: kasmctl [OPTIONS] [OPERATION] [TARGET]
 
 	Targets:
 	users		Create, list, update, or delete users.
-	groups		Create, list, update, or delete groups.
+	groups		Update user groups.
 	sessions	Create, list, update, or terminate sessions. Sessions can also have commands executed on them.
 
 	Options:

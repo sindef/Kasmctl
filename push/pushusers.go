@@ -60,6 +60,9 @@ func addUser(csvData map[string]string, url string, apikey string, secret string
 	url = url + "/api/public/create_user"
 	var jreq = createuserJson(csvData, apikey, secret)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jreq))
+	if err != nil {
+		fmt.Println(err)
+	}
 	req.Header.Set("Content-Type", "application/json")
 	//Set http default transport to skip certificate verification
 	client := &http.Client{}

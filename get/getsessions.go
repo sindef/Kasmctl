@@ -56,6 +56,9 @@ func GetKasms(url string, key string, secret string, notls bool) []byte {
 
 	js := []byte(`{"api_key":"` + key + `","api_key_secret":"` + secret + `"}`)
 	req, err := http.NewRequest("POST", getuserurl, bytes.NewBuffer(js))
+	if err != nil {
+		fmt.Println(err)
+	}
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	if notls {
@@ -87,7 +90,7 @@ func GetKasmID(url string, key string, secret string, notls bool, sessionid stri
 	return ""
 }
 
-func getKasmUser(url string, key string, secret string, notls bool, username string) {
+func GetKasmUser(url string, key string, secret string, notls bool, username string) {
 	body := GetKasms(url, key, secret, notls)
 
 	//Unmarshall the JSON into a struct - we can then print the fields we want
