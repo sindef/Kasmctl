@@ -16,21 +16,21 @@ import (
 // }
 
 type Image struct {
-	RestrictToNetwork       bool              `json:"restrict_to_network"`
-	Memory                  int               `json:"memory"`
-	ZoneName                string            `json:"zone_name"`
-	XRes                    int               `json:"x_res"`
-	Description             string            `json:"description"`
-	ImageId                 string            `json:"image_id"`
-	PersistentProfilePath   string            `json:"persistent_profile_path"`
-	FriendlyName            string            `json:"friendly_name"`
-	VolumeMappings          map[string]string `json:"volume_mappings"`
-	RestrictToZone          bool              `json:"restrict_to_zone"`
-	DockerToken             string            `json:"docker_token"`
-	PersistentProfileConfig map[string]string `json:"persistent_profile_config"`
-	Cores                   float64           `json:"cores"`
-	DockerRegistry          string            `json:"docker_registry"`
-	Available               bool              `json:"available"`
+	RestrictToNetwork       bool        `json:"restrict_to_network"`
+	Memory                  int         `json:"memory"`
+	ZoneName                string      `json:"zone_name"`
+	XRes                    int         `json:"x_res"`
+	Description             string      `json:"description"`
+	ImageId                 string      `json:"image_id"`
+	PersistentProfilePath   string      `json:"persistent_profile_path"`
+	FriendlyName            string      `json:"friendly_name"`
+	VolumeMappings          interface{} `json:"volume_mappings"`
+	RestrictToZone          bool        `json:"restrict_to_zone"`
+	DockerToken             string      `json:"docker_token"`
+	PersistentProfileConfig interface{} `json:"persistent_profile_config"`
+	Cores                   float64     `json:"cores"`
+	DockerRegistry          string      `json:"docker_registry"`
+	Available               bool        `json:"available"`
 	RunConfig               struct {
 		Hostname string `json:"hostname"`
 	} `json:"run_config"`
@@ -97,10 +97,7 @@ func GetImages(url string, apiKey string, apiKeySecret string, notls bool, verbo
 	}
 	//Unmarshal the response into a GetImagesResponse struct
 	var getImagesResponse GetImagesResponse
-	err = json.Unmarshal(body, &getImagesResponse)
-	if err != nil {
-		panic(err)
-	}
+	json.Unmarshal(body, &getImagesResponse)
 	if verbose {
 		for _, image := range getImagesResponse.Images {
 			//Print every attribute of our struct, with the format:
@@ -120,14 +117,8 @@ func GetImages(url string, apiKey string, apiKeySecret string, notls bool, verbo
 			for key, value := range image.ExecConfig {
 				fmt.Printf("\t%s: %s\n", key, value)
 			}
-			fmt.Printf("Volume Mappings:\n")
-			for key, value := range image.VolumeMappings {
-				fmt.Printf("\t%s: %s\n", key, value)
-			}
-			fmt.Printf("Persistent Profile Config:\n")
-			for key, value := range image.PersistentProfileConfig {
-				fmt.Printf("\t%s: %s\n", key, value)
-			}
+			//This is an interface containing a map of strings to strings, but we just want to print the map
+			fmt.Printf("Volume Mappings: %s\n", image.VolumeMappings)
 			fmt.Printf("Persistent Profile Path: %s\n", image.PersistentProfilePath)
 			fmt.Printf("Restrict To Zone: %t\n", image.RestrictToZone)
 			fmt.Printf("Restrict To Network: %t\n", image.RestrictToNetwork)

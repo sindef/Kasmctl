@@ -18,7 +18,7 @@ type TestAuth struct {
 	API_KEY_SECRET string `json:"api_key_secret"`
 }
 
-//This package tests our functions by spinning up a local HTTP server and responding to requests with a 200 OK. This is invoked with 'go test'
+//Test the API client by spinning up a quick mock HTTP server - This will parse incoming bodies and headers against expected values and return a response to the function
 func TestAPI(t *testing.T) {
 	//Start up a local HTTP server
 	server := http.Server{Addr: ":8080"}
@@ -28,7 +28,6 @@ func TestAPI(t *testing.T) {
 			if r.Method != "POST" {
 				t.Error("Expected POST request")
 			}
-			//Ensure the POST request includes the correct key and secret in the body
 			body, err := io.ReadAll(r.Body)
 			if err != nil {
 				t.Error("Error reading body")

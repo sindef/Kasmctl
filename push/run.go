@@ -23,7 +23,7 @@ func Run(target []string) {
 		}
 	case "group":
 		//Check the length of the target slice
-		if len(target) == 3 {
+		if len(target) > 3 {
 			if target[1] == "add" {
 				AddUserToGroup(url, key, secret, notls, target[2], target[3])
 			} else if target[1] == "remove" {

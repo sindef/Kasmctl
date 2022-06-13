@@ -27,14 +27,14 @@ func main() {
 		push.Run(target)
 	case "delete", "del", "rm", "--delete", "--del", "--rm", "-d":
 		delete.Run(target)
-	case "exec", "--exec", "-e":
+	case "exec", "--exec", "-e", "execute":
 		exec.Run(target)
 	case "help", "--help", "-h":
 		//Print the help message
 		admin.Help()
 	case "version", "--version", "-v":
 		//Print the version
-		fmt.Println("kasmctl v0.1")
+		fmt.Println("kasmctl v0.2")
 	default:
 		fmt.Println("Invalid operation" + os.Args[1])
 
