@@ -20,10 +20,11 @@ type Kasm struct {
 }
 
 func ExecCommand(url string, key string, secret string, notls bool, kasmid string, command string) {
-	execurl := url + "/api/public/exec_command_kasm"
+	uri := url + "/api/public/exec_command_kasm"
 	//Get the userid matching the sessionid
 	user := get.GetKasmID(url, key, secret, notls, kasmid)
-	fmt.Println("Executing command: " + command + " on kasm: " + kasmid + " as user: root")
+	ruser := "root"
+	fmt.Println("Executing command: " + command + " on kasm: " + kasmid + " as user: " + ruser)
 	fmt.Printf("Confirm? (y/n): ")
 	var input string
 	fmt.Scanln(&input)
@@ -43,10 +44,10 @@ func ExecCommand(url string, key string, secret string, notls bool, kasmid strin
 			"environment": {},
 			"workdir": "/home/kasm-user",
 			"privileged": true,
-			"user": "root"
+			"user": "` + ruser + `",
 		}
 	}`)
-	req, err := http.NewRequest("POST", execurl, bytes.NewBuffer(js))
+	req, err := http.NewRequest("POST", uri, bytes.NewBuffer(js))
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	if notls {

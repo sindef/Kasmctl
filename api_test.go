@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"kasmctl/delete"
 	"kasmctl/exec"
 	"kasmctl/get"
 	"kasmctl/push"
@@ -60,5 +61,6 @@ func TestAPI(t *testing.T) {
 	get.Test("http://localhost:8080", "testkey", "testsecret", false, "testtarget")
 	push.Test("http://localhost:8080", "testkey", "testsecret", false, "testtarget")
 	exec.Test("http://localhost:8080", "testkey", "testsecret", false, "testtarget")
+	delete.Test("http://localhost:8080", "testkey", "testsecret", false, "testtarget")
 
 }

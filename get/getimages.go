@@ -77,10 +77,10 @@ type GetImagesResponse struct {
 //Return a list of images in either simple or verbose format
 func GetImages(url string, apiKey string, apiKeySecret string, notls bool, verbose bool) {
 	var err error
-	url = url + "/api/public/get_images"
+	uri := url + "/api/public/get_images"
 	var jsonStr = []byte(`{"api_key":"` + apiKey + `","api_key_secret":"` + apiKeySecret + `"}`)
 	var req *http.Request
-	req, err = http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	req, err = http.NewRequest("POST", uri, bytes.NewBuffer(jsonStr))
 	if err != nil {
 		panic(err)
 	}

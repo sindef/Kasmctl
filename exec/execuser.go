@@ -11,7 +11,7 @@ import (
 
 func LogoutUser(url string, key string, secret string, notls bool, username string) {
 	userid := get.GetUserID(url, key, secret, notls, username)
-	logouturl := url + "/api/public/logout_user"
+	uri := url + "/api/public/logout_user"
 	//Json has to be a byte in the form of:
 	js := []byte(`{
 		"api_key": "` + key + `",
@@ -21,7 +21,7 @@ func LogoutUser(url string, key string, secret string, notls bool, username stri
 		}
 	}`)
 	//Make the post request to logout the user
-	req, err := http.NewRequest("POST", logouturl, bytes.NewBuffer(js))
+	req, err := http.NewRequest("POST", uri, bytes.NewBuffer(js))
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	if notls {

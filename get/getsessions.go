@@ -52,10 +52,10 @@ type Kasms struct {
 }
 
 func GetKasms(url string, key string, secret string, notls bool) []byte {
-	getuserurl := url + "/api/public/get_kasms"
+	uri := url + "/api/public/get_kasms"
 
 	js := []byte(`{"api_key":"` + key + `","api_key_secret":"` + secret + `"}`)
-	req, err := http.NewRequest("POST", getuserurl, bytes.NewBuffer(js))
+	req, err := http.NewRequest("POST", uri, bytes.NewBuffer(js))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -88,6 +88,19 @@ func GetKasmID(url string, key string, secret string, notls bool, sessionid stri
 		}
 	}
 	return ""
+}
+
+func GetKasm(url string, key string, secret string, notls bool, username string) (sessions []string) {
+	body := GetKasms(url, key, secret, notls)
+
+	var kasms Kasms
+	json.Unmarshal(body, &kasms)
+	for _, kasm := range kasms.Kasms {
+		if kasm.User.Username == username {
+			sessions = append(sessions, kasm.Kasm_id)
+		}
+	}
+	return sessions
 }
 
 func GetKasmUser(url string, key string, secret string, notls bool, username string) {

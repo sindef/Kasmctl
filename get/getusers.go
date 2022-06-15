@@ -77,7 +77,7 @@ func GetUserID(url string, key string, secret string, notls bool, username strin
 
 //Returns a JSON response from the API - gets a single user and returns the response as a []byte which can be unmarshalled into a struct
 func GetUser(url string, key string, secret string, notls bool, username string) []byte {
-	getuserurl := url + "/api/public/get_user"
+	uri := url + "/api/public/get_user"
 
 	js := []byte(`{
 		"api_key": "` + key + `",
@@ -86,7 +86,7 @@ func GetUser(url string, key string, secret string, notls bool, username string)
 			"username": "` + username + `"
 		}
 	}`)
-	req, err := http.NewRequest("POST", getuserurl, bytes.NewBuffer(js))
+	req, err := http.NewRequest("POST", uri, bytes.NewBuffer(js))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -130,10 +130,10 @@ func SingleUser(url string, key string, secret string, notls bool, username stri
 
 //Returns all of the users in the system
 func AllUsers(url string, key string, secret string, notls bool, verbose bool) {
-	getuserurl := url + "/api/public/get_users"
+	uri := url + "/api/public/get_users"
 
 	js := []byte(`{"api_key":"` + key + `","api_key_secret":"` + secret + `"}`)
-	req, err := http.NewRequest("POST", getuserurl, bytes.NewBuffer(js))
+	req, err := http.NewRequest("POST", uri, bytes.NewBuffer(js))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -192,8 +192,8 @@ func SingleUserAttr(url string, key string, secret string, notls bool, username 
 			"user_id": "` + userid + `"
 		}
 	}`)
-	attrurl := url + "/api/public/get_attributes"
-	req, err := http.NewRequest("POST", attrurl, bytes.NewBuffer(js))
+	uri := url + "/api/public/get_attributes"
+	req, err := http.NewRequest("POST", uri, bytes.NewBuffer(js))
 	if err != nil {
 		panic(err)
 	}

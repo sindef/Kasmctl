@@ -1,6 +1,6 @@
 package push
 
-//This is very dirty - this was the original quick script I made (albeit somewhat butchered) to add bulk users. I'll redo this at some point
+//This was the original quick script I made (albeit somewhat butchered) to add bulk users. I'll redo this at some point
 
 import (
 	"bytes"
