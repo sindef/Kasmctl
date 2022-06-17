@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 type UserDetails struct {
@@ -151,7 +152,35 @@ func AllUsers(url string, key string, secret string, notls bool, verbose bool) {
 	//Unmarshall the JSON.
 	var users Users
 	json.Unmarshal(body, &users)
+	maxUsername := 0
+	maxUserID := 0
+	maxSessions := 0
 	//Print all of the user's data - I used println to make it easier to read. Printf would be better for formatting, but I found the code to be a bit harder to read.
+	if verbose {
+		//Print verbose headers here - blank for now
+	} else {
+		//Print normal headers here: Username, UserID
+		//Set the width of the columns to be the longest username and user ID + 4 spaces
+
+		for _, user := range users.Users {
+			if len(user.Username) > maxUsername {
+				maxUsername = len(user.Username) + 4
+			}
+			if len(user.User_ID) > maxUserID {
+				maxUserID = len(user.User_ID) + 4
+			}
+			if len(user.Last_Session) > maxSessions {
+				maxSessions = len(user.Last_Session) + 4
+			}
+		}
+		//Print the headers
+		fmt.Printf("%-"+strconv.Itoa(maxUsername)+"s", "USERNAME")
+		fmt.Printf("%-"+strconv.Itoa(maxUserID)+"s", "USER ID")
+		fmt.Printf("%-"+strconv.Itoa(14)+"s", "LOCKED")
+		fmt.Printf("%-"+strconv.Itoa(14)+"s", "DISABLED")
+		fmt.Printf("%-"+strconv.Itoa(maxSessions)+"s", "LAST SESSION")
+		fmt.Println()
+	}
 	for _, user := range users.Users {
 		if verbose {
 			fmt.Println("Username: " + user.Username)
@@ -170,9 +199,13 @@ func AllUsers(url string, key string, secret string, notls bool, verbose bool) {
 			fmt.Println("Created: " + user.Created)
 			fmt.Println("")
 		} else {
-			fmt.Println("Username: " + user.Username)
-			fmt.Println("User ID: " + user.User_ID)
-			fmt.Println("")
+			//Print each user's username, kasms and user ID below the headers (which are spaced out to match the longest username and user ID)
+			fmt.Printf("%-"+strconv.Itoa(maxUsername)+"s", user.Username)
+			fmt.Printf("%-"+strconv.Itoa(maxUserID)+"s", user.User_ID)
+			fmt.Printf("%-"+strconv.Itoa(14)+"s", strconv.FormatBool(user.Locked)) //Just convert the bools to strings and print them as "true" or "false"
+			fmt.Printf("%-"+strconv.Itoa(14)+"s", strconv.FormatBool(user.Disabled))
+			fmt.Printf("%-"+strconv.Itoa(maxSessions)+"s", user.Last_Session)
+			fmt.Println()
 		}
 	}
 

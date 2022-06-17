@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 //This is a simple one, we only have one API call to make:
@@ -98,6 +99,12 @@ func GetImages(url string, apiKey string, apiKeySecret string, notls bool, verbo
 	//Unmarshal the response into a GetImagesResponse struct
 	var getImagesResponse GetImagesResponse
 	json.Unmarshal(body, &getImagesResponse)
+	nameLength := 10
+	for _, image := range getImagesResponse.Images {
+		if len(image.FriendlyName) >= nameLength {
+			nameLength = len(image.FriendlyName) + 4
+		}
+	}
 	if verbose {
 		for _, image := range getImagesResponse.Images {
 			//Print every attribute of our struct, with the format:
@@ -136,9 +143,13 @@ func GetImages(url string, apiKey string, apiKeySecret string, notls bool, verbo
 
 		}
 	} else {
+		//Print headers for the table
+		fmt.Printf("%-"+strconv.Itoa(nameLength)+"s", "FRIENDLY NAME")
+		fmt.Printf("%-"+strconv.Itoa(14)+"s", "IMAGE NAME")
+		fmt.Println()
 		for _, image := range getImagesResponse.Images {
-			fmt.Println("Friendly Name: " + image.FriendlyName)
-			fmt.Println("Image Name: " + image.Name + "\n")
+			fmt.Printf("%-"+strconv.Itoa(nameLength)+"s", image.FriendlyName)
+			fmt.Printf("%-"+strconv.Itoa(14)+"s", image.Name+"\n")
 		}
 	}
 

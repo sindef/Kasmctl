@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 type Kasm struct {
@@ -142,16 +143,32 @@ func GetKasmUser(url string, key string, secret string, notls bool, username str
 func GetAllKasms(url string, key string, secret string, notls bool) {
 	body := GetKasms(url, key, secret, notls)
 	var kasms Kasms
+	//Declare each variables starting at 10, in case some kasms are not found. Std length is 14 for memory and cores
+	kasLength := 10
+	userLength := 10
 	json.Unmarshal(body, &kasms)
 	for _, kasm := range kasms.Kasms {
-		fmt.Println("Kasm ID: " + kasm.Kasm_id)
-		fmt.Println("Share ID: " + kasm.Share_id)
-		fmt.Println("Memory:", kasm.Memory)
-		fmt.Println("Cores:", kasm.Cores)
-		fmt.Println("Image Friendly Name: " + kasm.Image.Friendly_name)
-		fmt.Println("View Only Token: " + kasm.View_only_token)
-		fmt.Println("User Name: " + kasm.User.Username)
-		fmt.Println("User ID: " + kasm.User_id)
-		fmt.Println("")
+		if len(kasm.Kasm_id) >= kasLength {
+			kasLength = len(kasm.Kasm_id) + 4
+		}
+		if len(kasm.User.Username) >= userLength {
+			userLength = len(kasm.User.Username) + 4
+		}
+	}
+	fmt.Printf("%-"+strconv.Itoa(kasLength)+"s", "KASM ID")
+	fmt.Printf("%-"+strconv.Itoa(14)+"s", "MEMORY")
+	fmt.Printf("%-"+strconv.Itoa(14)+"s", "CORES")
+	fmt.Printf("%-"+strconv.Itoa(userLength)+"s", "USER")
+	fmt.Printf("%-"+strconv.Itoa(14)+"s", "IMAGE NAME")
+	fmt.Println()
+	//Iterate through the sessions and print the data under the headers. Ensure the length of the data is the same as the length of the headers
+	for _, kasm := range kasms.Kasms {
+		fmt.Printf("%-"+strconv.Itoa(kasLength)+"s", kasm.Kasm_id)
+		fmt.Printf("%-"+strconv.Itoa(14)+"s", strconv.Itoa(kasm.Memory/1024/1024)+" MB")    //Memory will be represented in bytes, so we need to convert it to MB
+		fmt.Printf("%-"+strconv.Itoa(14)+"s", strconv.FormatFloat(kasm.Cores, 'f', -1, 64)) //Cores is stored as a float, so needs to be converted to a string
+		fmt.Printf("%-"+strconv.Itoa(userLength)+"s", kasm.User.Username)
+		fmt.Printf("%-"+strconv.Itoa(14)+"s", kasm.Image.Name)
+		fmt.Println()
+
 	}
 }
