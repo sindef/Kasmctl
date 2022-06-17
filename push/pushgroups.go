@@ -52,7 +52,7 @@ func AddUserToGroup(url string, key string, secret string, notls bool, username 
 
 //Remove a user from group, USER ID will be taken from the username, group ID needs to be passed from the command line.
 func RemoveUserFromGroup(url string, key string, secret string, notls bool, username string, groupid string) {
-	rmuserurl := url + "/api/public/remove_user_group"
+	uri := url + "/api/public/remove_user_group"
 	js := []byte(`{
 		"api_key": "` + key + `",
 		"api_key_secret": "` + secret + `",
@@ -63,7 +63,7 @@ func RemoveUserFromGroup(url string, key string, secret string, notls bool, user
 			"group_id": "` + groupid + `"
 		}
 	}`)
-	req, err := http.NewRequest("POST", rmuserurl, bytes.NewBuffer(js))
+	req, err := http.NewRequest("POST", uri, bytes.NewBuffer(js))
 	if err != nil {
 		fmt.Println(err)
 	}
