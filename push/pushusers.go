@@ -11,7 +11,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"unicode"
 )
 
 var (
@@ -81,48 +80,6 @@ func addUser(csvData map[string]string, url string, apikey string, secret string
 	} else {
 		return string(body)
 	}
-}
-
-/*Check if the password has at least 8 characters, 1 uppercase, 1 number, and 1 special character
-This is a very basic check, but it should be good enough for our purposes, especially given we're using plaintext here.*/
-func checkPassword(password string, username string) bool {
-	letters := 0
-	var num, upper, special bool
-	//For some reason, punctuation is not accepted - so we need to reject it (will look into this if time allows)
-	badchars := []string{"!", "(", ")", "-", "_", "=", "+", "[", "]", "{", "}", ";", ":", "'", ",", ".", "?"}
-	for i, c := range password {
-		switch {
-		case unicode.IsNumber(c):
-			num = true
-		case unicode.IsUpper(c):
-			upper = true
-		case unicode.IsPunct(c) || unicode.IsSymbol(c):
-			for _, badchar := range badchars {
-				if strings.Contains(string(c), badchar) {
-					fmt.Println(Red+"Bad character:", string(c), "at position", i, "in password for user", username+Reset)
-					return false
-				}
-			}
-			special = true
-		case unicode.IsSpace(c):
-			fmt.Println(Red+"Space Character in password for user", username, ". Not a valid password"+Reset)
-			return false
-		case unicode.IsLetter(c):
-			letters++
-
-		}
-	}
-	if letters < 8 {
-		fmt.Println(Red+"Password for user", username, "is too short"+Reset)
-		return false
-	}
-	if num && upper && special {
-		return true
-	}
-	//Return which variable was not true
-	fmt.Println(Red+"\nPassword for user", username, "does not meet the password criteria for Kasm."+Yellow)
-	fmt.Println("Password must contain at least 1 number, 1 uppercase and 1 special character" + Reset)
-	return false
 }
 
 func createuserJson(csvData map[string]string, apikey string, secret string) []byte {
