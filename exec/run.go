@@ -2,7 +2,7 @@ package exec
 
 import (
 	"fmt"
-	"kasmctl/admin"
+	"kasmctl/conf"
 	"kasmctl/test"
 )
 
@@ -11,7 +11,7 @@ import (
 
 //This is the entry point for EXEC functions
 func Run(target []string) {
-	config := admin.Getenv()
+	config := conf.Getenv()
 	url, key, secret, notls := test.TestConfig(config)
 	switch target[0] {
 	case "user":
@@ -37,10 +37,10 @@ func Run(target []string) {
 		}
 	default:
 		fmt.Println("Invalid target")
-		admin.Help()
+		conf.Help()
 	}
 }
 func Test(url string, key string, secret string, notls bool, target string) {
-	// ExecCommand(url, key, secret, notls, "1", "echo test")
-	// LogoutUser(url, key, secret, notls, "testuser")
+	ExecCommand(url, key, secret, notls, "1", "echo test")
+	LogoutUser(url, key, secret, notls, "testuser")
 }

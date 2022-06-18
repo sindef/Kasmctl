@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"kasmctl/admin"
+	"kasmctl/conf"
 	"kasmctl/delete"
 	"kasmctl/exec"
 	"kasmctl/get"
@@ -31,10 +31,10 @@ func main() {
 		exec.Run(target)
 	case "help", "--help", "-h":
 		//Print the help message
-		admin.Help()
+		conf.Help()
 	case "version", "--version", "-v":
 		//Print the version
-		fmt.Println("kasmctl v0.2")
+		fmt.Println("kasmctl v0.3")
 	default:
 		fmt.Println("Invalid operation" + os.Args[1])
 

@@ -2,13 +2,13 @@ package get
 
 import (
 	"fmt"
-	"kasmctl/admin"
+	"kasmctl/conf"
 	"kasmctl/test"
 )
 
 //Entry point for GET functions
 func Run(target []string) {
-	config := admin.Getenv()
+	config := conf.Getenv()
 	url, key, secret, notls := test.TestConfig(config)
 	if len(target) > 0 {
 		switch target[0] {
@@ -64,11 +64,11 @@ func Run(target []string) {
 			}
 		default:
 			fmt.Println("Invalid target")
-			admin.Help()
+			conf.Help()
 		}
 	} else {
 		fmt.Println("No target provided - Please provide a target")
-		admin.Help()
+		conf.Help()
 	}
 }
 

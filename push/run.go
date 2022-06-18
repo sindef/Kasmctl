@@ -2,14 +2,14 @@ package push
 
 import (
 	"fmt"
-	"kasmctl/admin"
+	"kasmctl/conf"
 	"kasmctl/test"
 	"os"
 )
 
 //Entry point for PUSH functions
 func Run(target []string) {
-	config := admin.Getenv()
+	config := conf.Getenv()
 	url, key, secret, notls := test.TestConfig(config)
 	switch target[0] {
 	case "user":
@@ -38,7 +38,7 @@ func Run(target []string) {
 		}
 	default:
 		fmt.Println("Invalid target")
-		admin.Help()
+		conf.Help()
 	}
 }
 func Test(url string, key string, secret string, notls bool, target string) {

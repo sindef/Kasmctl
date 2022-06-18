@@ -2,7 +2,7 @@ package delete
 
 import (
 	"fmt"
-	"kasmctl/admin"
+	"kasmctl/conf"
 	"kasmctl/test"
 )
 
@@ -11,7 +11,7 @@ func Run(target []string) {
 		fmt.Println("Please specify a target")
 		return
 	}
-	config := admin.Getenv()
+	config := conf.Getenv()
 	url, key, secret, notls := test.TestConfig(config)
 	switch target[0] {
 	case "user", "users":
