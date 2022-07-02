@@ -23,6 +23,9 @@ func ExecCommand(url string, key string, secret string, notls bool, kasmid strin
 	uri := url + "/api/public/exec_command_kasm"
 	//Get the userid matching the sessionid
 	user := get.GetKasmID(url, key, secret, notls, kasmid)
+	// fmt.Printf("Enter the user to run the command as: ")
+	// var ruser string
+	// fmt.Scanln(&ruser)
 	ruser := "root"
 	fmt.Println("Executing command: " + command + " on kasm: " + kasmid + " as user: " + ruser)
 	fmt.Printf("Confirm? (y/n): ")
@@ -44,10 +47,14 @@ func ExecCommand(url string, key string, secret string, notls bool, kasmid strin
 			"environment": {},
 			"workdir": "/home/kasm-user",
 			"privileged": true,
-			"user": "` + ruser + `",
+			"user": "` + ruser + `"
 		}
 	}`)
 	req, err := http.NewRequest("POST", uri, bytes.NewBuffer(js))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	if notls {

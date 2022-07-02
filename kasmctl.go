@@ -18,6 +18,19 @@ const (
 )
 
 func main() {
+	//If there are no arguments, print the welcome message:
+	if len(os.Args) == 1 {
+		fmt.Printf(Green + "\nWelcome to kasmctl!\n" + Reset +
+			"kasmctl is a command line interface for interacting with the Kasm API. It controls a Kasm instance using API calls\n" +
+			"To get started, create a configuration file at ~/.kasmctl/config, or set the following environmental variables:\n\n" +
+			"KASM_SECRET: Your API secret\n" +
+			"KASM_KEY: Your API key\n" +
+			"KASM_URL: The URL of the Kasm instance you want to control\n" +
+			"\n" +
+			"For more information, see the README.md file in the kasmctl repository on gitlab or reach out to me on Teams.\n" +
+			"You can also run `kasmctl --help` to see a list of commands and targets.\n")
+		return
+	}
 	//Parse the operation line arguments
 	target := os.Args[2:]
 	switch os.Args[1] {
@@ -34,7 +47,7 @@ func main() {
 		conf.Help()
 	case "version", "--version", "-v":
 		//Print the version
-		fmt.Println("kasmctl v0.3")
+		fmt.Println("kasmctl v0.4")
 	default:
 		fmt.Println("Invalid operation" + os.Args[1])
 

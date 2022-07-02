@@ -30,7 +30,7 @@ func Run(target []string) {
 		}
 	case "command":
 		if len(target) > 2 {
-			ExecCommand(url, key, secret, notls, target[2], target[1])
+			ExecCommand(url, key, secret, notls, target[1], target[2])
 		} else {
 			fmt.Println("Please specify a sessionid and command")
 			fmt.Println("kasmctl exec command <sessionid> <command>")

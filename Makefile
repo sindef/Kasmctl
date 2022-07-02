@@ -1,6 +1,3 @@
-BINRY_NAME=kasmctl
-TEMP_FILE=false
-
 tests:
 	go test ./...
 build:
